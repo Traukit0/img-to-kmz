@@ -56,7 +56,7 @@ def main():
 
     with st.form(key='uploader_form'):
         # Número de sets de imágenes y coordenadas para subir
-        num_sets = st.number_input('**Número de imágenes a subir, presionar enter después indicar cantidad de imágenes**', min_value=1, max_value=10, value=len(st.session_state.image_data) or 1)
+        num_sets = st.number_input('**Número de imágenes a subir, presionar enter después indicar cantidad de imágenes**', min_value=1, value=len(st.session_state.image_data) or 1)
         
         new_image_data = []
         for i in range(int(num_sets)):
