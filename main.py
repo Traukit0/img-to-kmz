@@ -11,8 +11,20 @@ def create_kmz(image_data):
         if img is not None:
             lat_decimal = convert_to_decimal(lat)
             lon_decimal = convert_to_decimal(lon)
-            # Convertir la imagen a formato que Google Earth pueda leer directamente
-            image_data_bytes = img.getvalue()
+            
+            # Abrir la imagen con PIL y redimensionarla a 1920x1080
+            pil_image = Image.open(img)
+            pil_image = pil_image.resize((1920, 1080))
+            
+            # Guardar la imagen redimensionada en un buffer
+            buffer = BytesIO()
+            pil_image.save(buffer, format='JPEG')
+            buffer.seek(0)
+            
+            # Obtener los bytes de la imagen redimensionada
+            image_data_bytes = buffer.getvalue()
+            
+            # Codificar la imagen en base64
             image_base64 = base64.b64encode(image_data_bytes).decode('utf-8')
             
             # Crear punto en el KML
@@ -20,7 +32,7 @@ def create_kmz(image_data):
             pnt.description = f"<img src='data:image/jpeg;base64,{image_base64}' width='400' /><br>{comm}"
             # Especificar el ícono
             pnt.style.iconstyle.icon.href = 'http://maps.google.com/mapfiles/kml/shapes/placemark_circle_highlight.png'
-            
+    
     # Guardar KML en un buffer
     buffer = BytesIO()
     kml.savekmz(buffer)
